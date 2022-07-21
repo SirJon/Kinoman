@@ -6,13 +6,19 @@ import {
   creatSiteButtonTemplate,
   creatSiteStatisticTemplate
 } from "./components.js";
+import {generateFilters, generateSort} from "./mock/mock.js";
+
 const render = (container, position, text) => {
   container.insertAdjacentHTML(position, text);
 };
 const headerBlock = document.querySelector(`.header`);
 render(headerBlock, `beforeend`, creatSiteUserTitleTemplate());
+
 const mainBlock = document.querySelector(`.main`);
-render(mainBlock, `beforeend`, creatSiteMenuTemplate());
+const filters = generateFilters();
+const sort = generateSort();
+render(mainBlock, `beforeend`, creatSiteMenuTemplate(filters, sort));
+
 render(mainBlock, `beforeend`, creatcontainerFilms());
 const filmsBlock = document.querySelectorAll(`.films-list__container`);
 for (let i = 0; i < 5; i++) {

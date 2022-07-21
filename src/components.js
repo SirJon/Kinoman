@@ -1,4 +1,5 @@
-const creatSiteUserTitleTemplate = () => {
+
+export const creatSiteUserTitleTemplate = () => {
   return (
     `<section class="header__profile profile">
             <p class="profile__rating">Movie Buff</p>
@@ -7,27 +8,51 @@ const creatSiteUserTitleTemplate = () => {
         `
   );
 };
-const creatSiteMenuTemplate = () => {
+
+const creatSiteMenuFilters = (filters, isChecked) => {
+  const {name, count} = filters;
+  return (
+    `
+    <a href="#${name.split(` `)[0].toLowerCase()}" class="main-navigation__item ${isChecked ? `main-navigation__item--active` : ``}">${name} ${count !== undefined ? ` <span class="main-navigation__item-count">${count}</span>` : ``}</a>
+    `
+  )
+};
+
+const creatSiteMenuSort = (sort, isChecked) => {
+  const {name} = sort;
+  return (
+    `
+    <li><a href="#" class="sort__button ${isChecked ? `sort__button--active` : ``}">${name}</a></li>
+    `
+  )
+};
+
+export const creatSiteMenuTemplate = (filters, sort) => {
+
+  const filtersMarkUp = filters.map((it, i) => {
+    return creatSiteMenuFilters(it, i == 0);
+  }).join(`\n`);
+
+  const sortMarkUp = sort.map((it,i) => {
+    return creatSiteMenuSort(it, i == 0);
+  }).join(`\n`);
+
   return (
     `<nav class="main-navigation">
             <div class="main-navigation__items">
-                <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-                <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-                <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-                <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
+              ${filtersMarkUp}
             </div>
             <a href="#stats" class="main-navigation__additional">Stats</a>
         </nav>
 
         <ul class="sort">
-            <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-            <li><a href="#" class="sort__button">Sort by date</a></li>
-            <li><a href="#" class="sort__button">Sort by rating</a></li>
+            ${sortMarkUp}
         </ul>
         `
   );
 };
-const creatcontainerFilms = () => {
+
+export const creatcontainerFilms = () => {
   return (
     `
         <section class="films">
@@ -47,7 +72,7 @@ const creatcontainerFilms = () => {
         `
   );
 };
-const creatSiteFilmCardTemplate = () => {
+export const creatSiteFilmCardTemplate = () => {
   return (
     `        
         <article class="film-card">
@@ -70,21 +95,13 @@ const creatSiteFilmCardTemplate = () => {
         `
   );
 };
-const creatSiteButtonTemplate = () => {
+export const creatSiteButtonTemplate = () => {
   return (
     `<button class="films-list__show-more">Show more</button>`
   );
 };
-const creatSiteStatisticTemplate = () => {
+export const creatSiteStatisticTemplate = () => {
   return (
     `<p>130 291 movies inside</p>`
   );
-};
-export {
-  creatSiteUserTitleTemplate,
-  creatSiteMenuTemplate,
-  creatcontainerFilms,
-  creatSiteFilmCardTemplate,
-  creatSiteButtonTemplate,
-  creatSiteStatisticTemplate
 };

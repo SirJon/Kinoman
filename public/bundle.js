@@ -17,6 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "creatSiteUserTitleTemplate": () => (/* binding */ creatSiteUserTitleTemplate),
 /* harmony export */   "creatcontainerFilms": () => (/* binding */ creatcontainerFilms)
 /* harmony export */ });
+
 const creatSiteUserTitleTemplate = () => {
   return (
     `<section class="header__profile profile">
@@ -26,26 +27,50 @@ const creatSiteUserTitleTemplate = () => {
         `
   );
 };
-const creatSiteMenuTemplate = () => {
+
+const creatSiteMenuFilters = (filters, isChecked) => {
+  const {name, count} = filters;
+  return (
+    `
+    <a href="#${name.split(` `)[0].toLowerCase()}" class="main-navigation__item ${isChecked ? `main-navigation__item--active` : ``}">${name} ${count !== undefined ? ` <span class="main-navigation__item-count">${count}</span>` : ``}</a>
+    `
+  )
+};
+
+const creatSiteMenuSort = (sort, isChecked) => {
+  const {name} = sort;
+  return (
+    `
+    <li><a href="#" class="sort__button ${isChecked ? `sort__button--active` : ``}">${name}</a></li>
+    `
+  )
+};
+
+const creatSiteMenuTemplate = (filters, sort) => {
+
+  const filtersMarkUp = filters.map((it, i) => {
+    return creatSiteMenuFilters(it, i == 0);
+  }).join(`\n`);
+
+  const sortMarkUp = sort.map((it,i) => {
+    return creatSiteMenuSort(it, i == 0);
+  }).join(`\n`);
+
   return (
     `<nav class="main-navigation">
             <div class="main-navigation__items">
-                <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-                <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-                <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-                <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
+              ${filtersMarkUp}
             </div>
             <a href="#stats" class="main-navigation__additional">Stats</a>
         </nav>
 
         <ul class="sort">
-            <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-            <li><a href="#" class="sort__button">Sort by date</a></li>
-            <li><a href="#" class="sort__button">Sort by rating</a></li>
+            ${sortMarkUp}
         </ul>
         `
   );
 };
+
 const creatcontainerFilms = () => {
   return (
     `
@@ -100,6 +125,50 @@ const creatSiteStatisticTemplate = () => {
   );
 };
 
+
+/***/ }),
+
+/***/ "./src/mock/mock.js":
+/*!**************************!*\
+  !*** ./src/mock/mock.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "generateFilters": () => (/* binding */ generateFilters),
+/* harmony export */   "generateSort": () => (/* binding */ generateSort)
+/* harmony export */ });
+const filtersName = [
+  `All movies`, 
+  `Watchlist`, 
+  `History`, 
+  `Favorites`,
+];
+
+const generateFilters = () => {
+  return filtersName.map(it => {
+    const result = {
+        name: it,
+      };
+    if(it !== `All movies`) result.count = Math.floor(Math.random()*15);
+    return result;
+  });
+};
+
+const sortName = [
+  `Sort by default`, 
+  `Sort by date`, 
+  `Sort by rating`, 
+];
+
+const generateSort = () => {
+  return sortName.map(it => {
+    return  {
+        name: it,
+      };
+  });
+};
 
 /***/ })
 
@@ -167,29 +236,37 @@ var __webpack_exports__ = {};
   \*********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components.js */ "./src/components.js");
+/* harmony import */ var _mock_mock_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mock/mock.js */ "./src/mock/mock.js");
+
+
 
 const render = (container, position, text) => {
   container.insertAdjacentHTML(position, text);
 };
-const headerBlock = document.querySelector(".header");
-render(headerBlock, "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteUserTitleTemplate)());
-const mainBlock = document.querySelector(".main");
-render(mainBlock, "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteMenuTemplate)());
-render(mainBlock, "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatcontainerFilms)());
-const filmsBlock = document.querySelectorAll(".films-list__container");
+const headerBlock = document.querySelector(`.header`);
+render(headerBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteUserTitleTemplate)());
+
+const mainBlock = document.querySelector(`.main`);
+const filters = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilters)();
+const sort = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateSort)();
+render(mainBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteMenuTemplate)(filters, sort));
+
+render(mainBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatcontainerFilms)());
+const filmsBlock = document.querySelectorAll(`.films-list__container`);
 for (let i = 0; i < 5; i++) {
-  render(filmsBlock[0], "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
-};
-const filmsListBlock = document.querySelector(".films-list");
-render(filmsListBlock, "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteButtonTemplate)());
+  render(filmsBlock[0], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+}
+const filmsListBlock = document.querySelector(`.films-list`);
+render(filmsListBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteButtonTemplate)());
 for (let i = 0; i < 2; i++) {
-  render(filmsBlock[1], "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
-};
+  render(filmsBlock[1], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+}
 for (let i = 0; i < 2; i++) {
-  render(filmsBlock[2], "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
-};
-const footerStatistics = document.querySelector(".footer__statistics");
-render(footerStatistics, "beforeend", (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteStatisticTemplate)());
+  render(filmsBlock[2], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+}
+const footerStatistics = document.querySelector(`.footer__statistics`);
+render(footerStatistics, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteStatisticTemplate)());
+
 })();
 
 /******/ })()
