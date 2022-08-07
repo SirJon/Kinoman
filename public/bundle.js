@@ -91,20 +91,21 @@ const creatcontainerFilms = () => {
         `
   );
 };
-const creatSiteFilmCardTemplate = () => {
+const creatSiteFilmCardTemplate = (card) => {
+  const {title, rating, year, duration, genre, poster, description, comments} = card;
   return (
     `        
         <article class="film-card">
-            <h3 class="film-card__title">Title</h3>
-            <p class="film-card__rating">rating</p>
+            <h3 class="film-card__title">${title}</h3>
+            <p class="film-card__rating">${rating}</p>
             <p class="film-card__info">
-                <span class="film-card__year">1900</span>
-                <span class="film-card__duration">0h 00m</span>
-                <span class="film-card__genre">Genre</span>
+                <span class="film-card__year">${year}</span>
+                <span class="film-card__duration">${duration}m</span>
+                <span class="film-card__genre">${genre}</span>
             </p>
-            <img src="" alt="" class="film-card__poster">
-            <p class="film-card__description">description</p>
-            <a class="film-card__comments">? comments</a>
+            <img src="${poster}" alt="" class="film-card__poster">
+            <p class="film-card__description">${description}</p>
+            <a class="film-card__comments">${comments} comments</a>
             <form class="film-card__controls">
                 <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
                 <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
@@ -136,6 +137,7 @@ const creatSiteStatisticTemplate = () => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "generateFilmCard": () => (/* binding */ generateFilmCard),
 /* harmony export */   "generateFilters": () => (/* binding */ generateFilters),
 /* harmony export */   "generateSort": () => (/* binding */ generateSort)
 /* harmony export */ });
@@ -145,6 +147,75 @@ const filtersName = [
   `History`, 
   `Favorites`,
 ];
+
+const title = [
+  `The Dance of Life`,
+  `Sagebrush Trail`,
+  `The Man with the Golden Arm`,
+  `Santa Claus Conquers the Martians`,
+  `Popeye the Sailor Meets Sindbad the Sailor`,
+  `The Man with the Golden Arm`,
+  `The Great Flamarion`,
+  `Santa Claus Conquers the Martians`,
+  `Made for Each Other`
+];
+
+const poster = [
+  `./images/posters/the-dance-of-life.jpg`,
+  `./images/posters/sagebrush-trail.jpg`,
+  `./images/posters/the-man-with-the-golden-arm.jpg`,
+  `./images/posters/santa-claus-conquers-the-martians.jpg`,
+  `./images/posters/popeye-meets-sinbad.png`,
+  `./images/posters/the-man-with-the-golden-arm.jpg`,
+  `./images/posters/the-great-flamarion.jpg`,
+  `./images/posters/santa-claus-conquers-the-martians.jpg`,
+  `./images/posters/made-for-each-other.png`,
+];
+
+const genre = [
+  `Musical`,
+  `Western`,
+  `Drama`,
+  `Comedy`,
+  `Cartoon`,
+  `Mystery`,
+];
+
+const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`;
+
+const shuffle = (arrayOrig) => {
+  const array = arrayOrig;
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+const randomEl = (arr) => {
+  return arr[Math.floor(Math.random()*arr.length)];
+};
+
+const getRandomNumber = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const randomSentence = (string) => {
+  const f = shuffle(string.split(`. `));
+  return f.slice(0, getRandomNumber(1,5));
+};
 
 const generateFilters = () => {
   return filtersName.map(it => {
@@ -169,6 +240,21 @@ const generateSort = () => {
       };
   });
 };
+
+const generateFilmCard = () => {
+  return {
+    title: `${randomEl(title)}`,
+    rating: `${getRandomNumber(10, 100)/10}`,
+    year: `${getRandomNumber(1920,1940)}`,
+    duration: `${getRandomNumber(0,2)}h ${getRandomNumber(0, 59)}m`,
+    genre: `${randomEl(genre)}`,
+    poster: `${randomEl(poster)}`,
+    description: `${randomSentence(description)}`,
+    comments: `18`,
+  }
+}
+
+
 
 /***/ })
 
@@ -240,30 +326,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const filters = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilters)();
+const sort = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateSort)();
+// const filmCard = generateFilmCard();
+
 const render = (container, position, text) => {
   container.insertAdjacentHTML(position, text);
 };
+
 const headerBlock = document.querySelector(`.header`);
 render(headerBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteUserTitleTemplate)());
 
 const mainBlock = document.querySelector(`.main`);
-const filters = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilters)();
-const sort = (0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateSort)();
 render(mainBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteMenuTemplate)(filters, sort));
-
 render(mainBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatcontainerFilms)());
+
 const filmsBlock = document.querySelectorAll(`.films-list__container`);
 for (let i = 0; i < 5; i++) {
-  render(filmsBlock[0], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+  render(filmsBlock[0], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)((0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilmCard)()));
 }
+
 const filmsListBlock = document.querySelector(`.films-list`);
 render(filmsListBlock, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteButtonTemplate)());
 for (let i = 0; i < 2; i++) {
-  render(filmsBlock[1], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+  render(filmsBlock[1], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)((0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilmCard)()));
 }
 for (let i = 0; i < 2; i++) {
-  render(filmsBlock[2], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)());
+  render(filmsBlock[2], `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteFilmCardTemplate)((0,_mock_mock_js__WEBPACK_IMPORTED_MODULE_1__.generateFilmCard)()));
 }
+
 const footerStatistics = document.querySelector(`.footer__statistics`);
 render(footerStatistics, `beforeend`, (0,_components_js__WEBPACK_IMPORTED_MODULE_0__.creatSiteStatisticTemplate)());
 
