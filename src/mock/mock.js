@@ -36,9 +36,49 @@ const genre = [
   `Comedy`,
   `Cartoon`,
   `Mystery`,
+  `Film-Noir`,
 ];
 
 const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`;
+
+const mounth = [
+  `January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`
+];
+
+const country = [
+  `USA`,
+  `Russia`,
+  `Mexico`,
+  `Ukraine`,
+  `France`,
+  `Germany`,
+  `India`,
+  `China`,
+];
+
+const people = [
+  `Anthony Mann`,
+  `Anne Wigton`,
+  `Heinz Herald`, 
+  `Richard Weil`,
+  `Erich von Stroheim`, 
+  `Mary Beth Hughes`, 
+  `Dan Duryea`,
+];
+
+const emoji = [
+  `./images/emoji/smile.png`,
+  `./images/emoji/sleeping.png`,
+  `./images/emoji/puke.png`,
+  `./images/emoji/angry.png`,
+];
+
+const commentsText = [
+  `Interesting setting and a good cast`,
+  `Booooooooooring`,
+  `Very very old. Meh`,
+  `Almost two hours? Seriously?`,
+];
 
 const shuffle = (arrayOrig) => {
   const array = arrayOrig;
@@ -67,11 +107,20 @@ const getRandomNumber = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-const randomSentence = (string) => {
+const randomSentence = (string, length) => {
   const f = shuffle(string.split(`. `));
-  return f.slice(0, getRandomNumber(1,5));
+  return f.slice(0, getRandomNumber(1,length));
+};
+
+const randomElNum = (string, length) => {
+  const f = shuffle(string);
+  return f.slice(0, getRandomNumber(1,length));
+};
+
+const altEmoji = (emj) => {
+  return (emj.split(`.png`).shift().split(`/`).pop());
 };
 
 export const generateFilters = () => {
@@ -98,16 +147,47 @@ export const generateSort = () => {
   });
 };
 
+
+
+const generateFilmComments = () => {
+  return {
+    emoji: `${randomEl(emoji)}`,
+    // alt: emoji,
+    comments: `${randomEl(commentsText)}`,
+    author: `${randomEl(people)}`,
+    day: `2022/${getRandomNumber(1,12)}/${getRandomNumber(1,30)} ${getRandomNumber(1,23)}:${getRandomNumber(1,59)}`,
+  }
+};
+
+const ff = () => {
+  let i = getRandomNumber(1, 4);
+  while(i < 4){
+    generateFilmComments();
+    i++;
+    console.log(i);
+  }
+};
+
+console.log(ff());
+
 export const generateFilmCard = () => {
   return {
     title: `${randomEl(title)}`,
     rating: `${getRandomNumber(10, 100)/10}`,
-    year: `${getRandomNumber(1920,1940)}`,
+    day: `${getRandomNumber(1,30)}`,
+    mounth: `${randomEl(mounth)}`,
+    year: `${getRandomNumber(1920,1970)}`,
     duration: `${getRandomNumber(0,2)}h ${getRandomNumber(0, 59)}m`,
-    genre: `${randomEl(genre)}`,
+    genre1: `${randomEl(genre)}`,
+    genre2: `${randomEl(genre)}`,
+    genre3: `${randomEl(genre)}`,
     poster: `${randomEl(poster)}`,
-    description: `${randomSentence(description)}`,
-    comments: `18`,
-  }
-}
-
+    description: `${randomSentence(description, 5)}`,
+    age: `${getRandomNumber(0,18)}+`,
+    director: `${randomElNum(people, 1)}`,
+    writers: `${randomElNum(people, 3)}`,
+    actors: `${randomElNum(people, 5)}`,
+    country: `${randomEl(country)}`,
+    // comments: `${ff}`,
+  };
+};

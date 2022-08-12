@@ -5,6 +5,7 @@ import {
   creatSiteFilmCardTemplate,
   creatSiteButtonTemplate,
   creatSiteStatisticTemplate,
+  creatSiteFilmCard,
 } from "./components.js";
 import {
   generateFilters, 
@@ -43,3 +44,6 @@ for (let i = 0; i < 2; i++) {
 
 const footerStatistics = document.querySelector(`.footer__statistics`);
 render(footerStatistics, `beforeend`, creatSiteStatisticTemplate());
+
+const body = document.querySelector(`body`);
+render(body, `beforeend`, creatSiteFilmCard(generateFilmCard()));
